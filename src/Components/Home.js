@@ -35,6 +35,7 @@ class Home extends Component {
             selectedDose: 'First',
             btn_text: 'Get Notified',
             showHideClassName: 'modal display-none',
+            click_btn_disable:false,
             resList: [],
             dose1: 1,
             dose2: 0,
@@ -162,6 +163,7 @@ class Home extends Component {
             this.setState({
                 animate_div: 'animated_div',
                 btn_text: 'Finding Slots',
+                click_btn_disable: true,
                 disableOptions: true,
                 disableDistrictDropdown: true,
                 errorResp:''
@@ -179,7 +181,7 @@ class Home extends Component {
                 self.setState({
                     timer: timer
                 })
-            }, 60 * 1000); // 60 * 1000 milsec
+            }, 120 * 1000); // 60 * 1000 milsec
         }
         else{
             this.setState({
@@ -312,6 +314,7 @@ class Home extends Component {
                         show: false,
                         animate_div: 'animated_div',
                         btn_text: 'Finding Slots',
+                        click_btn_disable:true,
                         resListDose2: [],
                         resListDose1: [],
                         cancelBtnShow: 'show-cancel-btn',
@@ -381,6 +384,8 @@ class Home extends Component {
             cancelBtnShow: 'show-cancel-btn',
             animate_div: 'animated_div',
             btn_text: 'Finding Slots',
+            click_btn_disable:true,
+
 
 
 
@@ -396,6 +401,8 @@ class Home extends Component {
             showHideClassName: 'modal display-none',
             show: false,
             animate_div: '',
+            click_btn_disable:false,
+
             btn_text: 'Get Notified',
             resListDose2: [],
             resListDose1: [],
@@ -559,7 +566,7 @@ class Home extends Component {
                     <div className='form-to-fill'>
                         <div className='row-1'>
                             <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Select Age</p>
+                                <p className='label' style={{ marginTop: '1px' }}>Age</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.ageOptions} onChange={this.selectAge} value={this.state.selectedAge} />
                             </div>
                             <Divider />
@@ -568,7 +575,7 @@ class Home extends Component {
 
                         <div className='row-1'>
                             <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Select Days</p>
+                                <p className='label' style={{ marginTop: '1px' }}>Number of Days to search</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.daysOptions} onChange={this.selectDays} value={this.state.selectedDays} />
                             </div>
 
@@ -578,7 +585,7 @@ class Home extends Component {
 
                         <div className='row-1'>
                             <div className='district-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Select State</p>
+                                <p className='label' style={{ marginTop: '1px' }}>State</p>
                                 <Select
                                     disabled={this.state.disableOptions}
                                     // mode="multiple"
@@ -595,7 +602,7 @@ class Home extends Component {
                             <br></br>
 
                             <div className='district-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Select District</p>
+                                <p className='label' style={{ marginTop: '1px' }}>District</p>
                                 <Select
                                     // mode="multiple"
                                     disabled={this.state.disableDistrictDropdown}
@@ -614,7 +621,7 @@ class Home extends Component {
 
                         <div className='row-1'>
                             <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Select Vaccine Type</p>
+                                <p className='label' style={{ marginTop: '1px' }}>Vaccine Type</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.vaccineOptions} onChange={this.selectVaccine} value={this.state.selectedVaccine} />
                             </div>
                             <Divider />
@@ -622,13 +629,13 @@ class Home extends Component {
 
                         <div className='row-1'>
                             <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Select Dose</p>
+                                <p className='label' style={{ marginTop: '1px' }}>Dose</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.doseOptions} onChange={this.selectDose} value={this.state.selectedDose} />
                             </div>
                             <Divider />
                         </div>
                         <div style={{ display: 'inline-block' }}>
-                            <button onClick={this.getNotified} id={this.state.animate_div} style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>{this.state.btn_text}</button>
+                            <button onClick={this.getNotified} id={this.state.animate_div} disabled={this.state.click_btn_disable} style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>{this.state.btn_text}</button>
 
                             {/* <div id='animated_div'>Finding Slot</div>
                             <p className='animate__pulse'>test</p> */}
@@ -645,32 +652,11 @@ class Home extends Component {
 
                     </div>
                 </div>
+                <div><p style={{fontSize:'16px',color:'#fff',margin:'auto 1%',padding:'5px', float:'right'}}>Managed by <a className='creator' href='https://www.linkedin.com/in/abhishek-agarwal-gurugram/'>Abhishek</a> & <a className='creator' href='https://www.linkedin.com/in/itsprashant95/'>Prashant</a></p></div>
 
 
 
                 {/* modal open */}
-
-                {/* <div className={this.state.showHideClassName}>
-                    <section className="modal-main">
-
-                        <div className='row' style={{ margin: '5px 5px 20px 5px' }}>
-                            <h2>Slots Available - Book now</h2>
-                            {this.createCards()}
-
-
-
-
-
-                        </div>
-
-                        <button style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px', float: 'right' }} className='btn-hover' type="button" onClick={this.handleCancel}>Okay</button>
-
-
-                    </section>
-                </div> */}
-
-
-
 
                 <Modal dialogClassName="my-modal" show={this.state.show} onHide={this.handleCancel}>
                     <Modal.Header closeButton>

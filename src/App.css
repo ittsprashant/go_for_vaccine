@@ -150,6 +150,7 @@
   border: 'solid 2px 3ff6c34'; 
   letter-spacing: '0.8px'; 
   padding: '4px 10px';
+  cursor: default;
 
 
 
@@ -381,4 +382,12 @@
 
 .show-cancel-btn{
   display: block
+}
+
+.creator{
+  color: #fff !important
+}
+.creator:hover{
+  cursor: pointer;
+  text-decoration: underline !important;
 }
