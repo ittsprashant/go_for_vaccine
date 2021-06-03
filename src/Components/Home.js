@@ -35,7 +35,7 @@ class Home extends Component {
             selectedDose: 'First',
             btn_text: 'Get Notified',
             showHideClassName: 'modal display-none',
-            click_btn_disable:false,
+            click_btn_disable: false,
             resList: [],
             dose1: 1,
             dose2: 0,
@@ -44,7 +44,7 @@ class Home extends Component {
             doseBool: '',
             resListDose1: [],
             resListDose2: [],
-            errorResp:'',
+            errorResp: '',
             cancelBtnShow: 'hide-cancel-btn',
             stateList: [{ "state_id": 1, "state_name": "Andaman and Nicobar Islands" }, { "state_id": 2, "state_name": "Andhra Pradesh" }, { "state_id": 3, "state_name": "Arunachal Pradesh" }, { "state_id": 4, "state_name": "Assam" }, { "state_id": 5, "state_name": "Bihar" }, { "state_id": 6, "state_name": "Chandigarh" }, { "state_id": 7, "state_name": "Chhattisgarh" }, { "state_id": 8, "state_name": "Dadra and Nagar Haveli" }, { "state_id": 37, "state_name": "Daman and Diu" }, { "state_id": 9, "state_name": "Delhi" }, { "state_id": 10, "state_name": "Goa" }, { "state_id": 11, "state_name": "Gujarat" }, { "state_id": 12, "state_name": "Haryana" }, { "state_id": 13, "state_name": "Himachal Pradesh" }, { "state_id": 14, "state_name": "Jammu and Kashmir" }, { "state_id": 15, "state_name": "Jharkhand" }, { "state_id": 16, "state_name": "Karnataka" }, { "state_id": 17, "state_name": "Kerala" }, { "state_id": 18, "state_name": "Ladakh" }, { "state_id": 19, "state_name": "Lakshadweep" }, { "state_id": 20, "state_name": "Madhya Pradesh" }, { "state_id": 21, "state_name": "Maharashtra" }, { "state_id": 22, "state_name": "Manipur" }, { "state_id": 23, "state_name": "Meghalaya" }, { "state_id": 24, "state_name": "Mizoram" }, { "state_id": 25, "state_name": "Nagaland" }, { "state_id": 26, "state_name": "Odisha" }, { "state_id": 27, "state_name": "Puducherry" }, { "state_id": 28, "state_name": "Punjab" }, { "state_id": 29, "state_name": "Rajasthan" }, { "state_id": 30, "state_name": "Sikkim" }, { "state_id": 31, "state_name": "Tamil Nadu" }, { "state_id": 32, "state_name": "Telangana" }, { "state_id": 33, "state_name": "Tripura" }, { "state_id": 34, "state_name": "Uttar Pradesh" }, { "state_id": 35, "state_name": "Uttarakhand" }, { "state_id": 36, "state_name": "West Bengal" }],
         }
@@ -153,7 +153,7 @@ class Home extends Component {
         this.setState({
             district_id: x[0],
             district_name: x[1],
-            errorResp:''
+            errorResp: ''
         })
     }
 
@@ -166,7 +166,9 @@ class Home extends Component {
                 click_btn_disable: true,
                 disableOptions: true,
                 disableDistrictDropdown: true,
-                errorResp:''
+                errorResp: '',
+                cancelBtnShow: 'show-cancel-btn',
+
 
                 // show:true,
 
@@ -183,9 +185,9 @@ class Home extends Component {
                 })
             }, 120 * 1000); // 60 * 1000 milsec
         }
-        else{
+        else {
             this.setState({
-                errorResp:'Please select state and district'
+                errorResp: 'Please select state and district'
             })
         }
     }
@@ -314,7 +316,7 @@ class Home extends Component {
                         show: false,
                         animate_div: 'animated_div',
                         btn_text: 'Finding Slots',
-                        click_btn_disable:true,
+                        click_btn_disable: true,
                         resListDose2: [],
                         resListDose1: [],
                         cancelBtnShow: 'show-cancel-btn',
@@ -384,7 +386,7 @@ class Home extends Component {
             cancelBtnShow: 'show-cancel-btn',
             animate_div: 'animated_div',
             btn_text: 'Finding Slots',
-            click_btn_disable:true,
+            click_btn_disable: true,
 
 
 
@@ -401,7 +403,7 @@ class Home extends Component {
             showHideClassName: 'modal display-none',
             show: false,
             animate_div: '',
-            click_btn_disable:false,
+            click_btn_disable: false,
 
             btn_text: 'Get Notified',
             resListDose2: [],
@@ -419,73 +421,6 @@ class Home extends Component {
 
 
     }
-
-    createCards = () => {
-        console.log('in create cards')
-
-        return (
-            this.state.resList.map((s, j) => {
-                console.log('1')
-
-                return (
-                    s.sessions.map((i, k) => {
-                        console.log('2')
-                        if (this.state.dose1 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
-                            console.log('3')
-                            return (
-                                <div>
-                                    <div className='analytics-card' style={{ textAlign: 'left' }}>
-                                        <p className='ana-details'>Hospital Name:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.centerDetails.split('\n')[0].split(':')[1]}</span></p>
-                                        <p className='ana-details'>Pin:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.pincode}</span></p>
-                                        <p className='ana-details'>Vaccine:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.vaccine}</span></p>
-                                        <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.date}</span></p>
-                                        <p className='ana-details'>Slots for First Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.available_capacity_dose1}</span></p>
-                                        <p className='ana-details'>Fees: {i.vaccine_fees != null ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.vaccine_fees}</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
-                                    </div>
-                                </div>
-                            )
-                        }
-
-                        else if (this.state.dose2 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && i.available_capacity_dose2 > 20) {
-                            console.log('3')
-                            return (
-                                <div>
-                                    <div className='analytics-card' style={{ textAlign: 'left' }}>
-                                        <p className='ana-details'>Hospital Name:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.centerDetails.split('\n')[0].split(':')[1]}</span></p>
-                                        <p className='ana-details'>Pin:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.pincode}</span></p>
-                                        <p className='ana-details'>Vaccine:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.vaccine}</span></p>
-                                        <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.date}</span></p>
-                                        <p className='ana-details'>Slots for Second Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.available_capacity_dose2}</span></p>
-                                        <p className='ana-details'>Fees: {i.vaccine_fees != null ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{i.vaccine_fees}</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
-                                    </div>
-                                </div>
-                            )
-                        }
-
-                        else {
-                            return (
-                                <div>
-                                    <button id='animated_div' style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>Finding Slots</button>
-                                </div>
-
-                                // this.setState({
-                                //     showHideClassName: 'modal display-block',
-                                //     show: false,
-                                //     disableOptions: false,
-                                //     beep: false,
-
-                                // })
-                                // <div>Please Try Again</div>
-                            )
-                        }
-                    })
-                )
-            })
-        )
-
-    }
-
-
 
     createCardsDose1 = () => {
         console.log('in create cards dose2')
@@ -557,8 +492,8 @@ class Home extends Component {
         return (
             <div id='wrapper'>
                 <div className='info-section'>
-                    <p className='info-section-head'>GoForVaccine</p>
-                    <p style={{ fontSize: '16px', padding: '5px' }}>Get notified whenever slots open up. Just fill in the details, sit back and relax!</p>
+                    <p className='info-section-head'>ForVaccine</p>
+                    <p style={{ fontSize: '16px', padding: '7px' }}>Get notified whenever slots open up. Just fill in the details, sit back and relax!</p>
                 </div>
                 <div className='main-box'>
                     {/* <p className='heading'>GoForVaccine</p> */}
@@ -647,12 +582,12 @@ class Home extends Component {
                             {/* <div id='animated_div'>Finding Slot</div>
                             <p className='animate__pulse'>test</p> */}
                         </div>
-                        <p style={{color:'red'}}>{this.state.errorResp}</p>
+                        <p style={{ color: 'red' }}>{this.state.errorResp}</p>
 
 
                     </div>
                 </div>
-                <div><p style={{fontSize:'16px',color:'#fff',margin:'auto 1%',padding:'5px', float:'right'}}>Managed by <a className='creator' href='https://www.linkedin.com/in/abhishek-agarwal-gurugram/'>Abhishek</a> & <a className='creator' href='https://www.linkedin.com/in/itsprashant95/'>Prashant</a></p></div>
+                <div><p style={{ fontSize: '16px', color: '#fff', margin: 'auto 1%', padding: '5px', float: 'right' }}>Managed by <a className='creator' href='https://www.linkedin.com/in/abhishek-agarwal-gurugram/'>Abhishek</a> & <a className='creator' href='https://www.linkedin.com/in/itsprashant95/'>Prashant</a></p></div>
 
 
 
