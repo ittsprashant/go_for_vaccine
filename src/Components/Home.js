@@ -510,7 +510,7 @@ class Home extends Component {
 
                         <div className='row-1'>
                             <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Number of Days to search</p>
+                                <p className='label' style={{ marginTop: '1px' }}>Availability Search For Days</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.daysOptions} onChange={this.selectDays} value={this.state.selectedDays} />
                             </div>
 
