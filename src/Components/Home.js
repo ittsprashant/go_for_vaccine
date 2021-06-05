@@ -20,9 +20,9 @@ class Home extends Component {
         super(props)
 
         this.state = {
-            ageValue: '18-45',
-            ageOptions: ['18-45', '45+'],
-            selectedAge: '18-45',
+            ageValue: '18',
+            ageOptions: ['18', '45'],
+            selectedAge: '18',
             selectedAgeValue: '18',
             state_id: '',
             district_id: '',
@@ -31,8 +31,8 @@ class Home extends Component {
             districtList: [],
             disableDistrictDropdown: true,
             disableOptions: false,
-            vaccineOptions: ['COVISHIELD', 'COVAXIN'],
-            selectedVaccine: 'COVISHIELD',
+            vaccineOptions: ['Any', 'COVISHIELD', 'COVAXIN'],
+            selectedVaccine: 'Any',
             daysOptions: ['7 days', '14 days'],
             selectedDays: '7 days',
             doseOptions: ['First', 'Second'],
@@ -56,8 +56,8 @@ class Home extends Component {
     }
 
     selectAge = (e) => {
-        console.log(e.target.value)
-        if (e.target.value == '18-45') {
+        // console.log(e.target.value)
+        if (e.target.value == '18') {
             this.setState({
                 selectedAge: e.target.value,
                 selectedAgeValue: '18'
@@ -72,21 +72,21 @@ class Home extends Component {
     }
 
     selectVaccine = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         this.setState({
             selectedVaccine: e.target.value
         })
     }
 
     selectDays = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         this.setState({
             selectedDays: e.target.value
         })
     }
 
     selectDose = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         if (e.target.value == 'First') {
             this.setState({
                 dose1: 1,
@@ -140,7 +140,7 @@ class Home extends Component {
                 // body: formData
             }).then((res) => res.json())
                 .then(res => {
-                    console.log('analytics =', res)
+                    // console.log('analytics =', res)
                     this.setState({
                         districtList: res.districts,
                         disableDistrictDropdown: false
@@ -163,7 +163,7 @@ class Home extends Component {
     }
 
     getNotified = () => {
-        console.log('btn clicked')
+        // console.log('btn clicked')
         if (this.state.district_id != '') {
             this.setState({
                 animate_div: 'animated_div',
@@ -174,17 +174,19 @@ class Home extends Component {
                 errorResp: '',
                 cancelBtnShow: 'show-cancel-btn',
             })
+            // this.checkSlot()
             var self = this
-            self.checkSlot(timer)
+            // self.checkSlot(timer)
 
             var timer = setInterval(function () {
                 // your code goes here...
                 console.log('recheck for slots')
-                self.checkSlot(timer)
                 self.setState({
                     timer: timer
+                }, () => {
+                    self.checkSlot()
                 })
-            }, 120 * 1000); // 60 * 1000 milsec
+            }, 60 * 1000); // 60 * 1000 milsec
         }
         else {
             this.setState({
@@ -193,36 +195,50 @@ class Home extends Component {
         }
     }
 
-    checkSlot = (timer) => {
+    checkSlot = () => {
         console.log('check slot')
 
         fetch('https://forvaccine.online/go/fetch/' + this.state.district_id + this.state.doseBool, {
             method: 'GET',
         }).then((res) => res.json())
             .then(res => {
-                console.log('res =', res)
+
+               
+        // clearInterval(this.state.timer)
+
+                // console.log('res =', res)
                 var x = []
-                console.log('before map x =', x)
+                // console.log('before map x =', x)
 
                 res.map((s, j) => {
                     s.sessions.map((i, k) => {
                         if (this.state.dose1 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
                             x.push({ 's': s, 'sessions': i })
-                            console.log('in 1st dose', x)
+                            // console.log('in 1st dose', x)
                         }
                         else if (this.state.dose2 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose2 > 20)) {
 
-                            console.log('in 2nd dose')
+                            // console.log('in 2nd dose')
+                            x.push({ 's': s, 'sessions': i })
+                        }
+                        else if (this.state.dose1 > 0 && this.state.selectedVaccine == 'Any' && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
+
+                            // console.log('in First dose any vaccine')
+                            x.push({ 's': s, 'sessions': i })
+                        }
+                        else if (this.state.dose2 > 0 && this.state.selectedVaccine == 'Any' && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose2 > 20)) {
+
+                            // console.log('in 2nd dose any vaccine')
                             x.push({ 's': s, 'sessions': i })
                         }
                     })
                 })
 
-                console.log('after map x =', x)
+                // console.log('after map x =', x)
 
                 if (x.length > 0 && this.state.dose1 > 0) {
 
-                    console.log('in x dose 1')
+                    // console.log('in x dose 1')
                     this.setState({
                         show: true,
                         resListDose1: x,
@@ -234,7 +250,7 @@ class Home extends Component {
                 }
                 else if (x.length > 0 && this.state.dose2 > 0) {
 
-                    console.log('in x dose2')
+                    // console.log('in x dose2')
                     this.setState({
                         showHideClassName: 'modal display-block',
                         show: true,
@@ -245,7 +261,7 @@ class Home extends Component {
                     })
                 }
                 else {
-                    console.log('no dose')
+                    // console.log('no dose')
                     this.setState({
                         showHideClassName: 'modal display-none',
                         show: false,
@@ -264,7 +280,7 @@ class Home extends Component {
     }
 
     beep = () => {
-        console.log('in beep')
+        // console.log('in beep')
         const audio = new Audio(track);
         audio.play();
     }
@@ -274,7 +290,7 @@ class Home extends Component {
         this.setState({
             showHideClassName: 'modal display-none',
             show: false,
-            disableOptions: false,
+            disableOptions: true,
             beep: false,
             resListDose1: [],
             resListDose2: [],
@@ -294,6 +310,8 @@ class Home extends Component {
 
     cancelFindingSlot = () => {
 
+        console.log('cancel finding slot clicked', this.state.timer)
+
         clearInterval(this.state.timer)
         this.setState({
             showHideClassName: 'modal display-none',
@@ -305,15 +323,17 @@ class Home extends Component {
             resListDose1: [],
             cancelBtnShow: 'hide-cancel-btn',
             disableOptions: false,
-            state_name: 'Please select state',
-            district_id: '',
-            state_id: '',
-            district_name: 'Please select district'
+            disableDistrictDropdown: false
+
+            // state_name: 'Please select state',
+            // district_id: '',
+            // state_id: '',
+            // district_name: 'Please select district'
         })
     }
 
     createCardsDose1 = () => {
-        console.log('in create cards dose2')
+        // console.log('in create cards dose2')
         return (
             this.state.resListDose1.map((s, j) => {
                 return (
@@ -361,11 +381,6 @@ class Home extends Component {
                 <div className='info-section'>
                     <p className='info-section-head'>ForVaccine</p>
                     <p style={{ fontSize: '16px', padding: '7px', marginBottom: '2px' }}>Get notified whenever slots open up. Just fill in the details, sit back and relax!</p>
-                    {/* <div style={{display:'flex', justifyContent:'center'}}>
-                    <p className='details-to-use'><CheckCircleOutlineIcon style={{fontSize:'22px'}}/> Choose details</p>
-                    <p className='details-to-use'><NotificationsNoneIcon style={{fontSize:'22px'}}/> Get notified</p>
-                    <p className='details-to-use'><LocalHospitalIcon style={{fontSize:'22px'}}/> Book slots</p>
-                    </div> */}
                     <div className='flex-container'>
                         <p className='details-to-use'><CheckCircleOutlineIcon style={{ fontSize: '22px' }} /> Choose details</p>
                         <p className='details-to-use'><NotificationsNoneIcon style={{ fontSize: '22px' }} /> Get notified</p>
@@ -382,7 +397,7 @@ class Home extends Component {
                     <div className='form-to-fill'>
                         <div className='row'>
                             <div className='age-section col'>
-                                <p className='label' style={{ marginTop: '1px' }}>Age</p>
+                                <p className='label' style={{ marginTop: '1px' }}>Minimum Age</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.ageOptions} onChange={this.selectAge} value={this.state.selectedAge} />
                             </div>
                             <Divider />
@@ -392,7 +407,7 @@ class Home extends Component {
                         <div className='row-1'>
                             <div className='age-section'>
                                 <p className='label' style={{ marginTop: '1px' }}>Availability Search For Days</p>
-                                <Radio.Group disabled={this.state.disableOptions} options={this.state.daysOptions} onChange={this.selectDays} value={this.state.selectedDays} />
+                                <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.daysOptions} onChange={this.selectDays} value={this.state.selectedDays} />
                             </div>
 
                             <Divider />
@@ -438,7 +453,7 @@ class Home extends Component {
                         <div className='row-1'>
                             <div className='age-section'>
                                 <p className='label' style={{ marginTop: '1px' }}>Vaccine Type</p>
-                                <Radio.Group disabled={this.state.disableOptions} options={this.state.vaccineOptions} onChange={this.selectVaccine} value={this.state.selectedVaccine} />
+                                <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.vaccineOptions} onChange={this.selectVaccine} value={this.state.selectedVaccine} />
                             </div>
                             <Divider />
                         </div>
@@ -446,7 +461,7 @@ class Home extends Component {
                         <div className='row-1'>
                             <div className='age-section'>
                                 <p className='label' style={{ marginTop: '1px' }}>Dose</p>
-                                <Radio.Group disabled={this.state.disableOptions} options={this.state.doseOptions} onChange={this.selectDose} value={this.state.selectedDose} />
+                                <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.doseOptions} onChange={this.selectDose} value={this.state.selectedDose} />
                             </div>
                             <Divider />
                         </div>
