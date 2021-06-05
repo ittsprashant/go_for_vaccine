@@ -27,7 +27,7 @@ class Home extends Component {
             districtList: [],
             disableDistrictDropdown: true,
             disableOptions: false,
-            vaccineOptions: ['COVISHIELD', 'COVAXINE'],
+            vaccineOptions: ['COVISHIELD', 'COVAXIN'],
             selectedVaccine: 'COVISHIELD',
             daysOptions: ['7 days', '14 days'],
             selectedDays: '7 days',
@@ -199,7 +199,7 @@ class Home extends Component {
         // formData.append("shop_name", 'test');
         // https://jsonplaceholder.typicode.com/todos/1
         // fetch('test'+this.state.district_id + this.state.doseBool, {
-        fetch('https://3.108.52.141:8080/go/fetch/' + this.state.district_id + this.state.doseBool, {
+        fetch('//3.108.52.141:8080/go/fetch/' + this.state.district_id + this.state.doseBool, {
             method: 'GET',
             // body: formData
         }).then((res) => res.json())
