@@ -450,7 +450,7 @@ class Home extends Component {
                             </div>
                             <Divider />
                         </div>
-                        <div style={{ display: 'inline-block' }}>
+                        <div>
                             <button onClick={this.getNotified} id={this.state.animate_div} disabled={this.state.click_btn_disable} style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>{this.state.btn_text}</button>
 
                             {/* <div id='animated_div'>Finding Slot</div>

@@ -116,9 +116,21 @@
   padding: 20px;
 }
 
+.flex-container {
+  /* flex-direction: column !important; */
+  width: 75% !important;
+}
+
 .modal-main{
   width: 80% !important
 }
+}
+
+@media screen and (max-width: 500px) {
+  .flex-container {
+    flex-direction: column !important;
+    width: 75% !important;
+  }
 }
 
 @media screen and (max-width: 425px) {
@@ -507,12 +519,12 @@
   text-align: center;
 }
 
-@media (max-width: 1400px) {
+/* @media (max-width: 1100px) {
   .flex-container {
     flex-direction: column !important;
     width: 50%;
   }
-}
+} */
 
 /* @media (max-width: 768px) {
   .flex-container {
