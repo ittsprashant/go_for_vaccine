@@ -345,7 +345,8 @@ class Home extends Component {
                             <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.date}</span></p>
                             <p className='ana-details'>Slots for First Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.available_capacity_dose1}</span></p>
                             <p className='ana-details'>Free/Paid: {s.s.fee_type == 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
-                            <p className='ana-details'><a href='https://selfregistration.cowin.gov.in/' target='_blank'>Book your slots now</a></p>
+                            <p className='book-slot'><a className='book-slot-btn' href='https://selfregistration.cowin.gov.in/' target='_blank'>Book Slot</a>
+                            </p>
                         </div>
                     </div>
                 )
@@ -367,7 +368,7 @@ class Home extends Component {
                             <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.date}</span></p>
                             <p className='ana-details'>Slots for Second Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.available_capacity_dose2}</span></p>
                             <p className='ana-details'>Free/Paid: {s.s.fee_type == 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
-                            <p className='ana-details'><a href='https://selfregistration.cowin.gov.in/' target='_blank'>Book your slots now</a></p>
+                            <button className='book-slot'><a href='https://selfregistration.cowin.gov.in/' target='_blank'>Book Slot</a></button>
                         </div>
                     </div>
                 )
@@ -470,16 +471,17 @@ class Home extends Component {
                         <div>
                             <button onClick={this.getNotified} id={this.state.animate_div} disabled={this.state.click_btn_disable} style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>{this.state.btn_text}</button>
 
+                            <button className={this.state.cancelBtnShow} onClick={this.cancelFindingSlot} style={{ background: '#ff0000', color: '#fff', borderRadius: '6px', float:'right', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>Cancel</button>
+
                             {/* <div id='animated_div'>Finding Slot</div>
                             <p className='animate__pulse'>test</p> */}
                         </div>
 
-                        <div className={this.state.cancelBtnShow}>
+                        {/* <div className={this.state.cancelBtnShow}>
                             <button onClick={this.cancelFindingSlot} style={{ background: '#ff0000', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px', marginTop: '10px' }}>Cancel</button>
 
-                            {/* <div id='animated_div'>Finding Slot</div>
-                            <p className='animate__pulse'>test</p> */}
-                        </div>
+                           
+                        </div> */}
                         <p style={{ color: 'red' }}>{this.state.errorResp}</p>
 
 
