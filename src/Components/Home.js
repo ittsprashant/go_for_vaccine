@@ -163,7 +163,6 @@ class Home extends Component {
     }
 
     getNotified = () => {
-        // console.log('btn clicked')
         if (this.state.district_id != '') {
             this.setState({
                 animate_div: 'animated_div',
@@ -174,19 +173,14 @@ class Home extends Component {
                 errorResp: '',
                 cancelBtnShow: 'show-cancel-btn',
             })
-            // this.checkSlot()
             var self = this
-            // self.checkSlot(timer)
-
-            var timer = setInterval(function () {
-                // your code goes here...
-                console.log('recheck for slots')
-                self.setState({
-                    timer: timer
-                }, () => {
+            self.checkSlot()
+            this.setState({
+                timer: setInterval(function (){
                     self.checkSlot()
-                })
-            }, 60 * 1000); // 60 * 1000 milsec
+
+                }, 60*1000)
+            })
         }
         else {
             this.setState({
@@ -202,14 +196,7 @@ class Home extends Component {
             method: 'GET',
         }).then((res) => res.json())
             .then(res => {
-
-               
-        // clearInterval(this.state.timer)
-
-                // console.log('res =', res)
                 var x = []
-                // console.log('before map x =', x)
-
                 res.map((s, j) => {
                     s.sessions.map((i, k) => {
                         if (this.state.dose1 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
@@ -368,7 +355,8 @@ class Home extends Component {
                             <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.date}</span></p>
                             <p className='ana-details'>Slots for Second Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.available_capacity_dose2}</span></p>
                             <p className='ana-details'>Free/Paid: {s.s.fee_type == 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
-                            <button className='book-slot'><a href='https://selfregistration.cowin.gov.in/' target='_blank'>Book Slot</a></button>
+                            <p className='book-slot'><a className='book-slot-btn' href='https://selfregistration.cowin.gov.in/' target='_blank'>Book Slot</a>
+                            </p>
                         </div>
                     </div>
                 )
