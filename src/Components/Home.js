@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Tabs } from 'antd';
 import { Checkbox, Divider } from 'antd';
 import { Radio } from 'antd';
 import { Select } from 'antd';
@@ -9,10 +10,15 @@ import SearchIcon from '@material-ui/icons/Search';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-
-
-
 import 'antd/dist/antd.css'
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+
+
+const { TabPane } = Tabs;
+
+
+
+
 const CheckboxGroup = Checkbox.Group;
 
 class Home extends Component {
@@ -55,9 +61,13 @@ class Home extends Component {
         }
     }
 
+    callback = (key) => {
+        console.log(key);
+    }
+
     selectAge = (e) => {
         // console.log(e.target.value)
-        if (e.target.value == '18') {
+        if (e.target.value === '18') {
             this.setState({
                 selectedAge: e.target.value,
                 selectedAgeValue: '18'
@@ -87,7 +97,7 @@ class Home extends Component {
 
     selectDose = (e) => {
         // console.log(e.target.value)
-        if (e.target.value == 'First') {
+        if (e.target.value === 'First') {
             this.setState({
                 dose1: 1,
                 dose2: 0,
@@ -163,57 +173,117 @@ class Home extends Component {
     }
 
     getNotified = () => {
-        if (this.state.district_id != '') {
+        console.log(this.state, this.props)
+        if (this.props.flag === 'district') {
+            console.log('in distrcict')
             this.setState({
+                district_id: this.props.district_id,
+                flag: this.props.flag,
                 animate_div: 'animated_div',
                 btn_text: 'Finding Slots',
                 click_btn_disable: true,
                 disableOptions: true,
-                disableDistrictDropdown: true,
                 errorResp: '',
                 cancelBtnShow: 'show-cancel-btn',
-            })
-            var self = this
-            self.checkSlot()
-            this.setState({
-                timer: setInterval(function (){
-                    self.checkSlot()
+            }, () => {
+                var self = this
+                self.checkSlot()
+                this.setState({
+                    timer: setInterval(function () {
+                        self.checkSlot()
 
-                }, 60*1000)
+                    }, 60 * 1000)
+                })
             })
         }
-        else {
+        else if (this.props.flag === 'pin') {
             this.setState({
-                errorResp: 'Please select state and district'
+                pin: this.props.pin,
+                flag: this.props.flag,
+                animate_div: 'animated_div',
+                btn_text: 'Finding Slots',
+                click_btn_disable: true,
+                disableOptions: true,
+                errorResp: '',
+                cancelBtnShow: 'show-cancel-btn',
+            }, () => {
+                var self = this
+                self.checkSlot()
+                this.setState({
+                    timer: setInterval(function () {
+                        self.checkSlot()
+
+                    }, 60 * 1000)
+                })
             })
+
         }
+
+        // if (this.state.district_id != '') {
+        //     this.setState({
+        //         animate_div: 'animated_div',
+        //         btn_text: 'Finding Slots',
+        //         click_btn_disable: true,
+        //         disableOptions: true,
+        //         disableDistrictDropdown: true,
+        //         errorResp: '',
+        //         cancelBtnShow: 'show-cancel-btn',
+        //     })
+        //     var self = this
+        //     self.checkSlot()
+        //     this.setState({
+        //         timer: setInterval(function () {
+        //             self.checkSlot()
+
+        //         }, 60 * 1000)
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         errorResp: 'Please select state and district'
+        //     })
+        // }
     }
 
     checkSlot = () => {
         console.log('check slot')
+        if (this.state.flag == 'district') {
+            var url = 'https://forvaccine.online/go/fetch/' + this.state.district_id
+        }
+        else if (this.state.flag == 'pin') {
+            var url = 'https://forvaccine.online/go/pin/' + this.state.pin
+        }
 
-        fetch('https://forvaccine.online/go/fetch/' + this.state.district_id + this.state.doseBool, {
+        fetch(url + this.state.doseBool, {
             method: 'GET',
         }).then((res) => res.json())
             .then(res => {
+                console.log('response aaya', res)
                 var x = []
                 res.map((s, j) => {
+                    console.log('111')
                     s.sessions.map((i, k) => {
-                        if (this.state.dose1 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
-                            x.push({ 's': s, 'sessions': i })
-                            // console.log('in 1st dose', x)
-                        }
-                        else if (this.state.dose2 > 0 && i.vaccine == this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose2 > 20)) {
+                        console.log('222', i.vaccine, i.min_age_limit, i.available_capacity, i.available_capacity_dose1)
+                        console.log('check=', this.state.dose1, this.state.selectedVaccine, this.state.selectedAgeValue)
 
-                            // console.log('in 2nd dose')
+                        if (this.state.dose1 > 0 && i.vaccine === this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
                             x.push({ 's': s, 'sessions': i })
+                            console.log('in 1st dose', x)
                         }
-                        else if (this.state.dose1 > 0 && this.state.selectedVaccine == 'Any' && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
+                        else if (this.state.dose2 > 0 && i.vaccine === this.state.selectedVaccine && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose2 > 20)) {
 
-                            // console.log('in First dose any vaccine')
+                            console.log('in 2nd dose')
                             x.push({ 's': s, 'sessions': i })
                         }
-                        else if (this.state.dose2 > 0 && this.state.selectedVaccine == 'Any' && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose2 > 20)) {
+                        else if (this.state.dose1 > 0 && this.state.selectedVaccine === 'Any' && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose1 > 20)) {
+
+                            console.log('in First dose any vaccine')
+                            x.push({ 's': s, 'sessions': i })
+                            console.log('in First dose any vaccine', x)
+
+
+                        }
+                        else if (this.state.dose2 > 0 && this.state.selectedVaccine === 'Any' && i.min_age_limit == this.state.selectedAgeValue && i.available_capacity > 20 && (i.available_capacity_dose2 > 20)) {
 
                             // console.log('in 2nd dose any vaccine')
                             x.push({ 's': s, 'sessions': i })
@@ -225,7 +295,7 @@ class Home extends Component {
 
                 if (x.length > 0 && this.state.dose1 > 0) {
 
-                    // console.log('in x dose 1')
+                    console.log('in x dose 1')
                     this.setState({
                         show: true,
                         resListDose1: x,
@@ -274,6 +344,8 @@ class Home extends Component {
 
     handleCancel = () => {
 
+
+        console.log('clicke cancel')
         this.setState({
             showHideClassName: 'modal display-none',
             show: false,
@@ -310,12 +382,11 @@ class Home extends Component {
             resListDose1: [],
             cancelBtnShow: 'hide-cancel-btn',
             disableOptions: false,
-            disableDistrictDropdown: false
+            disableDistrictDropdown: false,
+            cancel: true
 
-            // state_name: 'Please select state',
-            // district_id: '',
-            // state_id: '',
-            // district_name: 'Please select district'
+        }, () => {
+            this.props.handleCancelMainPage(this.state.cancel)
         })
     }
 
@@ -331,7 +402,7 @@ class Home extends Component {
                             <p className='ana-details'>Vaccine:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.vaccine}</span></p>
                             <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.date}</span></p>
                             <p className='ana-details'>Slots for First Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.available_capacity_dose1}</span></p>
-                            <p className='ana-details'>Free/Paid: {s.s.fee_type == 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
+                            <p className='ana-details'>Free/Paid: {s.s.fee_type === 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
                             <p className='book-slot'><a className='book-slot-btn' href='https://selfregistration.cowin.gov.in/' target='_blank'>Book Slot</a>
                             </p>
                         </div>
@@ -354,7 +425,7 @@ class Home extends Component {
                             <p className='ana-details'>Vaccine:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.vaccine}</span></p>
                             <p className='ana-details'>Date:<span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.date}</span></p>
                             <p className='ana-details'>Slots for Second Dose: <span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>{s.sessions.available_capacity_dose2}</span></p>
-                            <p className='ana-details'>Free/Paid: {s.s.fee_type == 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
+                            <p className='ana-details'>Free/Paid: {s.s.fee_type === 'Paid' ? <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Paid</span></> : <><span style={{ float: 'right', fontWeight: '400', color: '#ff6c34' }}>Free</span></>}</p>
                             <p className='book-slot'><a className='book-slot-btn' href='https://selfregistration.cowin.gov.in/' target='_blank'>Book Slot</a>
                             </p>
                         </div>
@@ -368,114 +439,111 @@ class Home extends Component {
     render() {
 
         return (
-            <div id='wrapper'>
-                <div className='info-section'>
-                    <p className='info-section-head'>ForVaccine</p>
-                    <p style={{ fontSize: '16px', padding: '7px', marginBottom: '2px' }}>Get notified whenever slots open up. Just fill in the details, sit back and relax!</p>
-                    <div className='flex-container'>
-                        <p className='details-to-use'><CheckCircleOutlineIcon style={{ fontSize: '22px' }} /> Choose details</p>
-                        <p className='details-to-use'><NotificationsNoneIcon style={{ fontSize: '22px' }} /> Get notified</p>
-                        <p className='details-to-use'><LocalHospitalIcon style={{ fontSize: '22px' }} /> Book slots</p>
+
+
+            <>
+                {/* <KeyboardBackspaceIcon/> */}
+
+                <div className='form-to-fill'>
+                    <div className='row'>
+
+                        <div className='age-section col'>
+                            <button disabled={this.state.disableOptions} onClick={()=>{this.setState({
+                                cancel: true
+                            },()=>{this.props.handleCancelMainPage(this.state.cancel)})}} className='back-btn'>
+                                <KeyboardBackspaceIcon />
+
+                            </button>
+
+                            <p className='label' style={{ marginTop: '1px' }}>Minimum Age</p>
+
+                            <Radio.Group disabled={this.state.disableOptions} options={this.state.ageOptions} onChange={this.selectAge} value={this.state.selectedAge} />
+                        </div>
+                        <Divider />
                     </div>
-                    <p style={{ fontSize: '16px', padding: '7px' }}><a className='find_slot'
-                        onClick={() => {
-                            this.setState({
-                                showHowToUse: true
-                            })
-                        }}>How to find a slot?</a></p>
-                </div>
-                <div className='main-box'>
-                    <div className='form-to-fill'>
-                        <div className='row'>
-                            <div className='age-section col'>
-                                <p className='label' style={{ marginTop: '1px' }}>Minimum Age</p>
-                                <Radio.Group disabled={this.state.disableOptions} options={this.state.ageOptions} onChange={this.selectAge} value={this.state.selectedAge} />
-                            </div>
-                            <Divider />
+
+
+                    <div className='row-1'>
+                        <div className='age-section'>
+                            <p className='label' style={{ marginTop: '1px' }}>Availability Search For Days</p>
+                            <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.daysOptions} onChange={this.selectDays} value={this.state.selectedDays} />
                         </div>
 
+                        <Divider />
+                    </div>
 
-                        <div className='row-1'>
-                            <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Availability Search For Days</p>
-                                <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.daysOptions} onChange={this.selectDays} value={this.state.selectedDays} />
-                            </div>
 
-                            <Divider />
+                    {/* <div className='row-1'>
+                        <div className='district-section'>
+                            <p className='label' style={{ marginTop: '1px' }}>State</p>
+                            <Select
+                                disabled={this.state.disableOptions}
+                                // mode="multiple"
+                                // disabled={this.state.disable}
+                                // allowClear
+                                placeholder="Please select state"
+                                value={this.state.state_name}
+                                onChange={this.handleSelectState}
+                                style={{ width: '90%' }}
+                            >
+                                {this.handleDropdownState()}
+                            </Select>
                         </div>
+                        <br></br>
 
-
-                        <div className='row-1'>
-                            <div className='district-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>State</p>
-                                <Select
-                                    disabled={this.state.disableOptions}
-                                    // mode="multiple"
-                                    // disabled={this.state.disable}
-                                    // allowClear
-                                    placeholder="Please select state"
-                                    value={this.state.state_name}
-                                    onChange={this.handleSelectState}
-                                    style={{ width: '90%' }}
-                                >
-                                    {this.handleDropdownState()}
-                                </Select>
-                            </div>
-                            <br></br>
-
-                            <div className='district-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>District</p>
-                                <Select
-                                    // mode="multiple"
-                                    disabled={this.state.disableDistrictDropdown}
-                                    // allowClear
-                                    placeholder="Please select district"
-                                    value={this.state.district_name}
-                                    onChange={this.handleSelectDistrict}
-                                    style={{ width: '90%' }}
-                                >
-                                    {this.handleDropdownDistrict()}
-                                </Select>
-                            </div>
-                            <Divider />
-
+                        <div className='district-section'>
+                            <p className='label' style={{ marginTop: '1px' }}>District</p>
+                            <Select
+                                // mode="multiple"
+                                disabled={this.state.disableDistrictDropdown}
+                                // allowClear
+                                placeholder="Please select district"
+                                value={this.state.district_name}
+                                onChange={this.handleSelectDistrict}
+                                style={{ width: '90%' }}
+                            >
+                                {this.handleDropdownDistrict()}
+                            </Select>
                         </div>
+                        <Divider />
 
-                        <div className='row-1'>
-                            <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Vaccine Type</p>
-                                <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.vaccineOptions} onChange={this.selectVaccine} value={this.state.selectedVaccine} />
-                            </div>
-                            <Divider />
+                    </div> */}
+
+                    <div className='row-1'>
+                        <div className='age-section'>
+                            <p className='label' style={{ marginTop: '1px' }}>Vaccine Type</p>
+                            <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.vaccineOptions} onChange={this.selectVaccine} value={this.state.selectedVaccine} />
                         </div>
+                        <Divider />
+                    </div>
 
-                        <div className='row-1'>
-                            <div className='age-section'>
-                                <p className='label' style={{ marginTop: '1px' }}>Dose</p>
-                                <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.doseOptions} onChange={this.selectDose} value={this.state.selectedDose} />
-                            </div>
-                            <Divider />
+                    <div className='row-1'>
+                        <div className='age-section'>
+                            <p className='label' style={{ marginTop: '1px' }}>Dose</p>
+                            <Radio.Group style={{ letterSpacing: '0.7px' }} disabled={this.state.disableOptions} options={this.state.doseOptions} onChange={this.selectDose} value={this.state.selectedDose} />
                         </div>
-                        <div>
-                            <button onClick={this.getNotified} id={this.state.animate_div} disabled={this.state.click_btn_disable} style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>{this.state.btn_text}</button>
+                        <Divider />
+                    </div>
+                    <div>
+                        <button onClick={this.getNotified} id={this.state.animate_div} disabled={this.state.click_btn_disable} style={{ background: '#ff6c34', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>{this.state.btn_text}</button>
 
-                            <button className={this.state.cancelBtnShow} onClick={this.cancelFindingSlot} style={{ background: '#ff0000', color: '#fff', borderRadius: '6px', float:'right', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>Cancel</button>
+                        <button className={this.state.cancelBtnShow} onClick={this.cancelFindingSlot} style={{ background: '#ff0000', color: '#fff', borderRadius: '6px', float: 'right', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px' }}>Cancel</button>
 
-                            {/* <div id='animated_div'>Finding Slot</div>
+                        {/* <div id='animated_div'>Finding Slot</div>
                             <p className='animate__pulse'>test</p> */}
-                        </div>
+                    </div>
 
-                        {/* <div className={this.state.cancelBtnShow}>
+                    {/* <div className={this.state.cancelBtnShow}>
                             <button onClick={this.cancelFindingSlot} style={{ background: '#ff0000', color: '#fff', borderRadius: '6px', border: 'solid 2px 3ff6c34', letterSpacing: '0.8px', padding: '4px 10px', marginTop: '10px' }}>Cancel</button>
 
                            
                         </div> */}
-                        <p style={{ color: 'red' }}>{this.state.errorResp}</p>
+                    <p style={{ color: 'red' }}>{this.state.errorResp}</p>
 
 
-                    </div>
                 </div>
-                <div style={{ color: '#fff', textAlign: 'center' }}><p className='footer'>Managed by <a className='creator' href='https://www.linkedin.com/in/abhishek-agarwal-gurugram/'>Abhishek</a> & <a className='creator' href='https://www.linkedin.com/in/itsprashant95/'>Prashant</a></p></div>
+
+                {/* <div style={{ color: '#fff', textAlign: 'center' }}><p className='footer'>Managed by <a className='creator' href='https://www.linkedin.com/in/abhishek-agarwal-gurugram/'>Abhishek</a> & <a className='creator' href='https://www.linkedin.com/in/itsprashant95/'>Prashant</a></p></div> */}
 
 
 
@@ -493,27 +561,7 @@ class Home extends Component {
                         </div>
                     </Modal.Body>
                 </Modal>
-
-                {/* modal for how to use */}
-                <Modal dialogClassName="my-modal" show={this.state.showHowToUse} onHide={this.handleCancelHowToUse}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>It is easy to use</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <ul>
-                            <li>Choose minimum age from given options</li>
-                            <li>Choose number of days</li>
-                            <li>Select state and district</li>
-                            <li>Chooose vaccine</li>
-                            <li>Chooose whether it is your first dose or second</li>
-                            <li>Click on 'Get Notified'</li>
-                        </ul>
-                        <p>Our Webapp will keep on searching for slots according to your choices and notify you. Available slots will be displayed with relevant details.</p>
-                        <p>Best part - if you miss a notification it will still keep on searching for slots until you chose to cancel.</p>
-                        <p></p>
-                    </Modal.Body>
-                </Modal>
-            </div>
+            </>
         )
     }
 }

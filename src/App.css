@@ -69,7 +69,8 @@
   background-image: linear-gradient(to top, rgba(79,134,240,0.839), rgba(79,134,240,0.839)),url(./vaccine.jpg);
   /* background-image: linear-gradient(to top, #8abe06, #333333  ), url(./vaccine.jpg); */
   /* justify-content: center; */
-    min-height: 60vh;
+    /* min-height: 60vh; */
+    min-height: 100vh;
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -393,4 +394,69 @@
 
 .ant-divider-horizontal{
   margin: 12px 0px !important;
+}
+
+
+
+
+
+/* Pin.js */
+
+.search-box{
+  display: flex;
+  text-align: center;
+}
+
+.ant-tabs{
+  align-items: center;
+}
+
+.ant-tabs-tab-btn {
+  outline: none;
+  transition: all 0.3s;
+  font-size: 18px;
+}
+
+.ant-tabs-content-holder {
+  width: 60%;
+  margin-top: 20px;
+}
+
+.next-btn{
+  margin-top: 12px;
+  border-radius: 6px;
+  letter-spacing: 0.7px;
+  background: #1890ff;
+  color: #fff;
+  padding: 3px 10px;
+}
+
+.ant-select{
+  width: 100% !important;
+}
+
+.back-btn{
+  float: right;
+  padding: 0px 10px;
+  border-radius: 6px;
+  /* background: black; */
+  background: rgba(79,134,240,0.839);
+  color: #fff;
+  box-shadow: -1px 0px 4px 1px lightgrey;
+}
+
+@media screen and (max-width:500px) {
+  .ant-tabs-tab-btn {
+    font-size: 16px !important;
+  }
+  .ant-tabs-content-holder {
+    width: 80%;
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width:375px) {
+  .ant-tabs-tab-btn {
+    font-size: 12px !important;
+  }
 }
