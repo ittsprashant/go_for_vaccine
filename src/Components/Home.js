@@ -61,10 +61,6 @@ class Home extends Component {
         }
     }
 
-    callback = (key) => {
-        console.log(key);
-    }
-
     selectAge = (e) => {
         // console.log(e.target.value)
         if (e.target.value === '18') {
@@ -382,11 +378,11 @@ class Home extends Component {
             resListDose1: [],
             cancelBtnShow: 'hide-cancel-btn',
             disableOptions: false,
-            disableDistrictDropdown: false,
-            cancel: true
+            // disableDistrictDropdown: false,
+            // cancel: true
 
         }, () => {
-            this.props.handleCancelMainPage(this.state.cancel)
+            // this.props.handleCancelMainPage(this.state.cancel)
         })
     }
 
