@@ -26,6 +26,7 @@ class Pin extends Component {
             pin: '',
             district_id: '',
             showMainForm: false,
+            pin:'',
             flag: '' //this flag tells whether next is done from pin section or district section
 
 
@@ -140,8 +141,8 @@ class Pin extends Component {
 
                         <Tabs defaultActiveKey="1" onChange={this.callback}>
                             <TabPane tab="Search By PIN" key="1">
-                                <Input placeholder="Please enter PIN" onChange={(e) => { this.setState({ pin: e.target.value }) }} />
-                                <Divider />
+                                <Input placeholder="Please enter PIN" value={this.state.pin} onChange={(e) => { this.setState({ pin: e.target.value }) }} />
+                                {/* <Divider /> */}
 
                                 <button onClick={this.nextPin} className='next-btn'>Next</button>
                                 <p style={{ color: 'red' }}>{this.state.errorResp}</p>
@@ -178,7 +179,7 @@ class Pin extends Component {
                                             {this.handleDropdownDistrict()}
                                         </Select>
                                     </div>
-                                    <Divider />
+                                    {/* <Divider /> */}
 
                                     <button onClick={this.nextDistrict} className='next-btn'>Next</button>
                                     <p style={{ color: 'red' }}>{this.state.errorResp}</p>

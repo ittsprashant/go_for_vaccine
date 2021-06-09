@@ -423,12 +423,13 @@
 }
 
 .next-btn{
-  margin-top: 12px;
+  margin-top: 20px;
   border-radius: 6px;
-  letter-spacing: 0.7px;
-  background: #1890ff;
+  background: #ff6c34;
   color: #fff;
-  padding: 3px 10px;
+  /* border: solid 2px #ff6c344; */
+  letter-spacing: 0.8px; 
+  padding: 4px 10px;
 }
 
 .ant-select{
@@ -437,7 +438,7 @@
 
 .back-btn{
   float: right;
-  padding: 0px 10px;
+  padding: 0px 5px;
   border-radius: 6px;
   /* background: black; */
   background: rgba(79,134,240,0.839);
