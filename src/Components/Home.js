@@ -386,8 +386,8 @@ class Home extends Component {
                 </div>
                 <div className='main-box'>
                     <div className='form-to-fill'>
-                        <div className='row'>
-                            <div className='age-section col'>
+                        <div className='row-1'>
+                            <div className='age-section'>
                                 <p className='label' style={{ marginTop: '1px' }}>Minimum Age</p>
                                 <Radio.Group disabled={this.state.disableOptions} options={this.state.ageOptions} onChange={this.selectAge} value={this.state.selectedAge} />
                             </div>
